@@ -1,6 +1,5 @@
 <?php
 include ("Soporte.php");
-
 class Cliente{
 
     private int $numero;
@@ -10,6 +9,8 @@ class Cliente{
     public  function __construct(public string $nombre, int $numero, int $maxAlquilerConcurrente=3){
         $this->numero=$numero;
         $this->maxAlquilerConcurrente=$maxAlquilerConcurrente;
+        $this->soportesAlquilados=[];
+        $this->numSoportesAlquilados=0;
     }
 
     public function getNumero(){
@@ -37,14 +38,15 @@ class Cliente{
 
     public function alquilar(Soporte $s):bool{
         if (in_array($s,$this->soportesAlquilados) || count($this->soportesAlquilados)==$this->maxAlquilerConcurrente){
-            if (in_array($s,$this->soportesAlquilados)) echo "El cliente ya tiene alquilado el soporte <strong>$s->titulo</strong>";
-            if (count($this->soportesAlquilados)==$this->maxAlquilerConcurrente) echo "El cliente tiene ". count($this->soportesAlquilados) ." soportes 
+            if (in_array($s,$this->soportesAlquilados)) echo "<br>El cliente ya tiene alquilado el soporte <strong>$s->titulo</strong>";
+            if (count($this->soportesAlquilados)==$this->maxAlquilerConcurrente) echo "<br>El cliente tiene ". count($this->soportesAlquilados) ." soportes 
             alquilados. No puede alquilar más hasta que no devuelva algo.";
             return false;
         }else{
             $this->numSoportesAlquilados++;
             $this->soportesAlquilados[]=$s;
-            echo "<strong>Alquilado soporte a: </strong> $this->nombre";
+            echo "<br><strong>Alquilado soporte a: </strong> $this->nombre";
+            $s->muestraResumen();
             return true;
         }
     }
@@ -56,14 +58,16 @@ class Cliente{
         }
         if ($alquilada){
             $this->numSoportesAlquilados--;
-            echo "El soporte ha sido devuelto";
+            echo "<br>El soporte ha sido devuelto";
+            return true;
         }else{
-            echo "No se ha podido encontrar el soporte en los alquileres de este cliente";
+            echo "<br>No se ha podido encontrar el soporte en los alquileres de este cliente";
+            return false;
         }
     }
 
     public function listaAlquileres():void{
-        echo $this->nombre." tiene ". count($this->soportesAlquilados). "alquileres activos:";
+        echo "<br>$this->nombre tiene ". count($this->soportesAlquilados). "alquileres activos:";
         foreach ($this->soportesAlquilados as $soporte){
             $soporte->muestraResumen();
         }

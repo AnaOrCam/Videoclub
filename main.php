@@ -28,10 +28,10 @@
 //echo "<br>Precio IVA incluido: " . $miJuego->getPrecioConIva() . " euros";
 //$miJuego->muestraResumen();
 
-include_once "CintaVideo.php";
-include_once "Dvd.php";
-include_once "Juego.php";
 include_once "Cliente.php";
+include_once "CintaVideo.php";
+include_once "Juego.php";
+include_once "Dvd.php";
 
 //instanciamos un par de objetos cliente
 $cliente1 = new Cliente("Bruce Wayne", 23);
