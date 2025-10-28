@@ -3,8 +3,8 @@
 class Dvd extends Soporte{
 
     private string $formatPantalla;
-    public function __construct(string $titulo, int $numero, float $precio, public string $idiomas, string $formatPantalla){
-        parent::__construct($titulo, $numero, $precio);
+    public function __construct(string $titulo, float $precio, public string $idiomas, string $formatPantalla){
+        parent::__construct($titulo, $precio);
         $this->formatPantalla=$formatPantalla;
     }
 

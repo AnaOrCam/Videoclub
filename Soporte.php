@@ -1,10 +1,13 @@
 <?php
 
-class Soporte{
+include_once "Resumible.php";
+abstract class Soporte implements Resumible {
 
     private float $precio;
-    public function __construct(public string $titulo, protected int $numero, float $precio){
+    private static int $numSop=0;
+    public function __construct(public string $titulo, float $precio){
         $this->precio=$precio;
+        $this->numero=self::$numSop++;
     }
 
     public function getPrecio(){

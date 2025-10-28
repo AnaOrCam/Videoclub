@@ -1,13 +1,15 @@
 <?php
-include ("Soporte.php");
+include_once ("Soporte.php");
 class Cliente{
 
     private int $numero;
     private array $soportesAlquilados;
     private int $numSoportesAlquilados;
     private int $maxAlquilerConcurrente;
-    public  function __construct(public string $nombre, int $numero, int $maxAlquilerConcurrente=3){
-        $this->numero=$numero;
+
+    private static $numSocios=0;
+    public  function __construct(public string $nombre, int $maxAlquilerConcurrente=3){
+        $this->numero=self::$numSocios++;
         $this->maxAlquilerConcurrente=$maxAlquilerConcurrente;
         $this->soportesAlquilados=[];
         $this->numSoportesAlquilados=0;
@@ -26,7 +28,7 @@ class Cliente{
     }
 
     public function muestraResumen(){
-        echo $this->nombre." tiene ". count($this->soportesAlquilados)."alquileres activos";
+        echo "<br>".$this->nombre." tiene ". count($this->soportesAlquilados)." alquileres activos";
     }
 
     public function tieneAlquilado(Soporte $s):bool{
