@@ -1,5 +1,7 @@
 <?php
 
+namespace Dwes\ProyectoVideoclub;
+
 include_once "Soporte.php";
 include_once "CintaVideo.php";
 include_once "Dvd.php";
@@ -65,6 +67,7 @@ class Videoclub{
         if ($socioAux==null) echo "No existe el número de socio";
         if ($soporteAux==null) echo "No existe el numero de soporte";
         if ($soporteAux!= null && $socioAux!= null) $socioAux->alquilar($soporteAux);
+        return $this;
     }
 
 }

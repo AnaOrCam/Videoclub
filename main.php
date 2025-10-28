@@ -70,7 +70,9 @@
 
 include_once "Videoclub.php"; // No incluimos nada más
 
-$vc = new Videoclub("Severo 8A");
+use Dwes\ProyectoVideoclub\Videoclub as vc;
+
+$vc = new vc("Severo 8A");
 
 //voy a incluir unos cuantos soportes de prueba
 $vc->incluirJuego("God of War", 19.99, "PS4", 1, 1);
@@ -88,14 +90,16 @@ $vc->listarProductos();
 $vc->incluirSocio("Amancio Ortega");
 $vc->incluirSocio("Pablo Picasso", 2);
 
-$vc->alquilarSocioProducto(1,2);
-$vc->alquilarSocioProducto(1,3);
-//alquilo otra vez el soporte 2 al socio 1.
-// no debe dejarme porque ya lo tiene alquilado
-$vc->alquilarSocioProducto(1,2);
-//alquilo el soporte 6 al socio 1.
-//no se puede porque el socio 1 tiene 2 alquileres como máximo
-$vc->alquilarSocioProducto(1,6);
+//$vc->alquilarSocioProducto(1,2);
+//$vc->alquilarSocioProducto(1,3);
+////alquilo otra vez el soporte 2 al socio 1.
+//// no debe dejarme porque ya lo tiene alquilado
+//$vc->alquilarSocioProducto(1,2);
+////alquilo el soporte 6 al socio 1.
+////no se puede porque el socio 1 tiene 2 alquileres como máximo
+//$vc->alquilarSocioProducto(1,6);
+
+$vc->alquilarSocioProducto(1,2)->alquilarSocioProducto(1,3)->alquilarSocioProducto(1,2)->alquilarSocioProducto(1,6);
 
 //listo los socios
 $vc->listarSocios();
