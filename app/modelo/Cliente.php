@@ -2,7 +2,10 @@
 
 namespace Dwes\ProyectoVideoclub;
 
-include_once ("Soporte.php");
+include_once("Soporte.php");
+include_once __DIR__."/../SoporteYaAlquiladoException.php";
+include_once __DIR__."/../CupoYaSuperadoException.php";
+include_once __DIR__."/../SoporteNoEncontradoException.php";
 class Cliente{
 
     private int $numero;
@@ -43,13 +46,13 @@ class Cliente{
 
     public function alquilar(Soporte $s):bool{
         if (in_array($s,$this->soportesAlquilados) || count($this->soportesAlquilados)==$this->maxAlquilerConcurrente){
-            if (in_array($s,$this->soportesAlquilados)) echo "<br>El cliente ya tiene alquilado el soporte <strong>$s->titulo</strong>";
-            if (count($this->soportesAlquilados)==$this->maxAlquilerConcurrente) echo "<br>El cliente tiene ". count($this->soportesAlquilados) ." soportes 
-            alquilados. No puede alquilar más hasta que no devuelva algo.";
+            if (in_array($s,$this->soportesAlquilados)) throw new util\SoporteYaAlquiladoException("",0,null,$s);
+            if (count($this->soportesAlquilados)==$this->maxAlquilerConcurrente) throw new util\CupoYaSuperadoException();
             return false;
         }else{
             $this->numSoportesAlquilados++;
             $this->soportesAlquilados[]=$s;
+            $s->alquilado=true;
             echo "<br><strong>Alquilado soporte a: </strong> $this->nombre";
             $s->muestraResumen();
             return true;
@@ -58,17 +61,19 @@ class Cliente{
 
     public function devolver(int $numSoporte):bool{
         $alquilada=false;
-        foreach ($this->soportesAlquilados as $soporte){
-            if ($soporte->getNumero()==$numSoporte) $alquilada=true;
+        for ($i=0; $i<count($this->soportesAlquilados); $i++){
+            if ($this->soportesAlquilados[$i]->getNumero()==$numSoporte){
+                $alquilada=true;
+                $this->soportesAlquilados[$i]->alquilado=false;
+                array_splice($this->soportesAlquilados,$i,1);
+                $this->numSoportesAlquilados--;
+                echo "<br>El soporte ha sido devuelto";
+                return true;
+            }
         }
-        if ($alquilada){
-            $this->numSoportesAlquilados--;
-            echo "<br>El soporte ha sido devuelto";
-            return true;
-        }else{
-            echo "<br>No se ha podido encontrar el soporte en los alquileres de este cliente";
-            return false;
-        }
+        if (!$alquilada) throw new util\SoporteNoEncontradoException();
+
+        return false;
     }
 
     public function listaAlquileres():void{

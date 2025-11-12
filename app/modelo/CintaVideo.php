@@ -7,6 +7,8 @@ class CintaVideo extends Soporte{
         parent::__construct($nombre,$precio);
         $this->duracion=$duracion;
     }
+
+    public function getTitulo(){}
     public function muestraResumen()
     {
         echo "<br>Película en VHS:";

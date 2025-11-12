@@ -17,8 +17,10 @@ class Juego extends Soporte{
         else return "Para $this->maxNumJugadores jugadores";
     }
 
+    public function getTitulo(){}
+
     public function muestraResumen(){
         echo "<br>Juego para PS4:";
-        echo parent::muestraResumen().$this->muestraJugadoresPosibles();
+        echo  parent::muestraResumen() . $this->muestraJugadoresPosibles();
     }
 }

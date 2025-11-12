@@ -100,6 +100,9 @@ $vc->incluirSocio("Pablo Picasso", 2);
 //$vc->alquilarSocioProducto(1,6);
 
 $vc->alquilarSocioProducto(1,2)->alquilarSocioProducto(1,3)->alquilarSocioProducto(1,2)->alquilarSocioProducto(1,6);
+$vc->alquilarSocioProductos(0,[0,1,6]);
 
+$vc->devolverSocioProducto(0,0)->devolverSocioProducto(1,2);
+$vc->devolverSocioProductos(0,[6,1]);
 //listo los socios
 $vc->listarSocios();
