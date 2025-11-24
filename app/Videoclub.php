@@ -10,6 +10,7 @@ include_once "modelo/CintaVideo.php";
 include_once "modelo/Dvd.php";
 include_once "modelo/Juego.php";
 include_once "modelo/Cliente.php";
+
 class Videoclub{
 
     public function __construct(private string $nombre){
@@ -22,32 +23,72 @@ class Videoclub{
         $this->numTotalAlquileres=0;
     }
 
+    public function getProductos(): array
+    {
+        return $this->productos;
+    }
+
+    public function getSocios(): array
+    {
+        return $this->socios;
+    }
+
+    public function getAlquileresPorCliente (int $id):array{
+        return $this->buscarSocioPorId($id)->getAlquileres();
+    }
+
     private function incluirProducto(Soporte $producto){
         $this->productos[]=$producto;
         $this->numProductos++;
         echo "Incluido soporte ".$producto->getNumero()."<br>";
     }
 
+    public function buscarSocioPorId(int $id):?Cliente{
+        foreach ($this->socios as $socio){
+            if ($socio->getNumero()==$id) return $socio;
+        }
+        return null;
+    }
+
+    public function editarClientePorAdmin($cliente,$nombre,$usuario,$pass,$maxAlquConcurrentes):bool{
+        $cliente->setNombre($nombre);
+        $cliente->setUsuario($usuario);
+        $cliente->setPass($pass);
+        $cliente->setMaxAlquilerConcurrente($maxAlquConcurrentes);
+        return true;
+    }
+
+    public function editarClientePorCliente($cliente,$nombre,$usuario,$pass):bool{
+        $cliente->setNombre($nombre);
+        $cliente->setUsuario($usuario);
+        $cliente->setPass($pass);
+        return true;
+    }
+
     public function incluirCintaVideo($titulo, $precio, $duracion){
         $videoAux=new CintaVideo($titulo, $precio, $duracion);
         $this->incluirProducto($videoAux);
+        return $videoAux;
     }
 
     public function incluirDvd($titulo, $precio, $idiomas, $pantalla){
         $dvdAux=new Dvd($titulo, $precio, $idiomas, $pantalla);
         $this->incluirProducto($dvdAux);
+        return $dvdAux;
     }
 
     public function incluirJuego($titulo, $precio, $consola, $minJ, $maxJ){
         $juegoAux=new Juego($titulo, $precio, $consola, $minJ, $maxJ);
         $this->incluirProducto($juegoAux);
+        return $juegoAux;
     }
 
-    public function incluirSocio($nombre, $maxAlquileresConcurrentes=3){
-        $clienteAux=new Cliente($nombre, $maxAlquileresConcurrentes);
+    public function incluirSocio($nombre, $usuario,$pass,$maxAlquileresConcurrentes=3){
+        $clienteAux=new Cliente($nombre, $usuario,$pass, $maxAlquileresConcurrentes);
         $this->socios[]=$clienteAux;
         $this->numSocios++;
         echo "Incluido socio ".$clienteAux->getNumero()."<br>";
+        return $clienteAux;
     }
 
     public function listarProductos(){

@@ -14,11 +14,59 @@ class Cliente{
     private int $maxAlquilerConcurrente;
 
     private static $numSocios=0;
-    public  function __construct(public string $nombre, int $maxAlquilerConcurrente=3){
+    public  function __construct(public string $nombre, public string $usuario, public string $pass,int $maxAlquilerConcurrente=3){
         $this->numero=self::$numSocios++;
+        $this->usuario=$usuario;
+        $this->pass=$pass;
         $this->maxAlquilerConcurrente=$maxAlquilerConcurrente;
         $this->soportesAlquilados=[];
         $this->numSoportesAlquilados=0;
+    }
+
+    public function getAlquileres(): array{
+        return $this->soportesAlquilados;
+    }
+
+    public function getMaxAlquilerConcurrente(): int
+    {
+        return $this->maxAlquilerConcurrente;
+    }
+
+    public function setMaxAlquilerConcurrente(int $maxAlquilerConcurrente): void
+    {
+        $this->maxAlquilerConcurrente = $maxAlquilerConcurrente;
+    }
+
+    public function setUsuario(string $usuario): void
+    {
+        $this->usuario = $usuario;
+    }
+
+    public function setPass(string $pass): void
+    {
+        $this->pass = $pass;
+    }
+
+    public function setNombre(string $nombre): void
+    {
+        $this->nombre = $nombre;
+    }
+
+
+    public function getNombre(): string
+    {
+        return $this->nombre;
+    }
+
+
+    public function getUsuario(): string
+    {
+        return $this->usuario;
+    }
+
+    public function getPass(): string
+    {
+        return $this->pass;
     }
 
     public function getNumero(){
@@ -81,5 +129,9 @@ class Cliente{
         foreach ($this->soportesAlquilados as $soporte){
             $soporte->muestraResumen();
         }
+    }
+
+    public function __toString():string{
+        return $this->nombre."\nID: ".$this->numero."\nUsuario: ".$this->usuario." Soportes alquilados: ".$this->numSoportesAlquilados;
     }
 }

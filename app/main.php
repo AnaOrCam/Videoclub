@@ -1,4 +1,5 @@
 <?php
+session_start();
 //include "Soporte.php";
 //include "CintaVideo.php";
 //include "Dvd.php";
@@ -75,20 +76,20 @@ use Dwes\ProyectoVideoclub\Videoclub as vc;
 $vc = new vc("Severo 8A");
 
 //voy a incluir unos cuantos soportes de prueba
-$vc->incluirJuego("God of War", 19.99, "PS4", 1, 1);
-$vc->incluirJuego("The Last of Us Part II", 49.99, "PS4", 1, 1);
-$vc->incluirDvd("Torrente", 4.5, "es","16:9");
-$vc->incluirDvd("Origen", 4.5, "es,en,fr", "16:9");
-$vc->incluirDvd("El Imperio Contraataca", 3, "es,en","16:9");
-$vc->incluirCintaVideo("Los cazafantasmas", 3.5, 107);
-$vc->incluirCintaVideo("El nombre de la Rosa", 1.5, 140);
+$soporte1=$vc->incluirJuego("God of War", 19.99, "PS4", 1, 1);
+$soporte2=$vc->incluirJuego("The Last of Us Part II", 49.99, "PS4", 1, 1);
+$soporte3=$vc->incluirDvd("Torrente", 4.5, "es","16:9");
+$soporte4=$vc->incluirDvd("Origen", 4.5, "es,en,fr", "16:9");
+$soporte5=$vc->incluirDvd("El Imperio Contraataca", 3, "es,en","16:9");
+$soporte6=$vc->incluirCintaVideo("Los cazafantasmas", 3.5, 107);
+$soporte7=$vc->incluirCintaVideo("El nombre de la Rosa", 1.5, 140);
 
 //listo los productos
 $vc->listarProductos();
 
 //voy a crear algunos socios
-$vc->incluirSocio("Amancio Ortega");
-$vc->incluirSocio("Pablo Picasso", 2);
+$cliente1=$vc->incluirSocio("Amancio Ortega","aortega","aortega");
+$cliente2=$vc->incluirSocio("Pablo Picasso", "ppicasso","ppicasso",2);
 
 //$vc->alquilarSocioProducto(1,2);
 //$vc->alquilarSocioProducto(1,3);
@@ -99,10 +100,23 @@ $vc->incluirSocio("Pablo Picasso", 2);
 ////no se puede porque el socio 1 tiene 2 alquileres como máximo
 //$vc->alquilarSocioProducto(1,6);
 
-$vc->alquilarSocioProducto(1,2)->alquilarSocioProducto(1,3)->alquilarSocioProducto(1,2)->alquilarSocioProducto(1,6);
+//$vc->alquilarSocioProducto(1,2)->alquilarSocioProducto(1,3)->alquilarSocioProducto(1,2)->alquilarSocioProducto(1,6);
 $vc->alquilarSocioProductos(0,[0,1,6]);
+$vc->alquilarSocioProductos(1,[2,4]);
 
-$vc->devolverSocioProducto(0,0)->devolverSocioProducto(1,2);
-$vc->devolverSocioProductos(0,[6,1]);
+//$vc->devolverSocioProducto(0,0)->devolverSocioProducto(1,2);
+//$vc->devolverSocioProductos(0,[6,1]);
 //listo los socios
-$vc->listarSocios();
+//$vc->listarSocios();
+
+$arrayClientes=[$cliente1,$cliente2];
+$arraySoportes=[$soporte1,$soporte2,$soporte3,$soporte4,$soporte5,$soporte6,$soporte7];
+$alquileresVigentes=[
+    $cliente1->getNumero() => [$soporte1,$soporte2,$soporte7],
+    $cliente2->getNumero() => [$soporte3,$soporte5]
+    ];
+$_SESSION['videoclub']=$vc;
+$_SESSION['arrayClientes']=$arrayClientes;
+$_SESSION['arraySoportes']=$arraySoportes;
+$_SESSION['alquileresVigentes']=$alquileresVigentes;
+header('Location: Login.php');
