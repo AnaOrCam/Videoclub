@@ -1,8 +1,9 @@
 <?php
 
-namespace Dwes\ProyectoVideoclub;
+namespace Dwes\ProyectoVideoclub\Modelo;
 
-include_once __DIR__ . "/../Resumible.php";
+use Dwes\ProyectoVideoclub\Util\Interfaces\Resumible;
+//include_once __DIR__ . "/../Util/Interfaces/Resumible.php";
 abstract class Soporte implements Resumible {
 
     private float $precio;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dwes\ProyectoVideoclub;
+namespace Dwes\ProyectoVideoclub\Modelo;
 class Juego extends Soporte{
 
     private int $minNumJugadores;

@@ -69,7 +69,7 @@ session_start();
 ////este cliente no tiene alquileres
 //$cliente2->devolver(2);
 
-include_once "Videoclub.php"; // No incluimos nada más
+//include_once "Videoclub.php"; // No incluimos nada más
 
 use Dwes\ProyectoVideoclub\Videoclub as vc;
 

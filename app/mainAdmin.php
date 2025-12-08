@@ -1,11 +1,12 @@
 <?php
 
-include_once "Videoclub.php";
-include_once "modelo/Cliente.php";
-include_once "modelo/Soporte.php";
-include_once "modelo/CintaVideo.php";
-include_once "modelo/Dvd.php";
-include_once "modelo/Juego.php";
+//include_once "Videoclub.php";
+//include_once "Modelo/Cliente.php";
+//include_once "Modelo/Soporte.php";
+//include_once "Modelo/CintaVideo.php";
+//include_once "Modelo/Dvd.php";
+//include_once "Modelo/Juego.php";
+include_once __DIR__."/../vendor/autoload.php";
 
 session_start();
 

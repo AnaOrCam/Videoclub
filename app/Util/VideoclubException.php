@@ -1,5 +1,5 @@
 <?php
-namespace Dwes\ProyectoVideoclub\util;
+namespace Dwes\ProyectoVideoclub\Util;
 
 use Exception;
 

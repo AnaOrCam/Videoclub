@@ -1,6 +1,7 @@
 <?php
 
-include_once "Videoclub.php";
+//include_once "Videoclub.php";
+include_once __DIR__."/../vendor/autoload.php";
 session_start();
 $videoclub=$_SESSION['videoclub'] ?? [];
 echo '<h1>Bienvenido '.$_SESSION['usuario'].'</h1><br><br>';

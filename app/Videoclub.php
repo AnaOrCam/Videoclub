@@ -2,14 +2,19 @@
 
 namespace Dwes\ProyectoVideoclub;
 
-use Dwes\ProyectoVideoclub\util\SoporteYaAlquiladoException;
-use Dwes\ProyectoVideoclub\util\VideoclubException;
-
-include_once "modelo/Soporte.php";
-include_once "modelo/CintaVideo.php";
-include_once "modelo/Dvd.php";
-include_once "modelo/Juego.php";
-include_once "modelo/Cliente.php";
+use Dwes\ProyectoVideoclub\Modelo\CintaVideo;
+use Dwes\ProyectoVideoclub\Modelo\Cliente;
+use Dwes\ProyectoVideoclub\Modelo\Dvd;
+use Dwes\ProyectoVideoclub\Modelo\Juego;
+use Dwes\ProyectoVideoclub\Util\SoporteYaAlquiladoException;
+use Dwes\ProyectoVideoclub\Util\VideoclubException;
+use Dwes\ProyectoVideoclub\Modelo\Soporte;
+//
+//include_once "Modelo/Soporte.php";
+//include_once "Modelo/CintaVideo.php";
+//include_once "Modelo/Dvd.php";
+//include_once "Modelo/Juego.php";
+//include_once "Modelo/Cliente.php";
 
 class Videoclub{
 

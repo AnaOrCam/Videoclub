@@ -1,7 +1,8 @@
 <?php
 
-include_once 'videoclub.php';
-include_once "modelo/Cliente.php";
+//include_once 'videoclub.php';
+//include_once "Modelo/Cliente.php";
+include_once __DIR__."/../vendor/autoload.php";
 session_start();
 
 $usuario=$_GET['usuario'];

@@ -1,8 +1,8 @@
 <?php
 
-namespace Dwes\ProyectoVideoclub\util;
-include_once "modelo/Soporte.php";
-include_once __DIR__."/VideoclubException.php";
+namespace Dwes\ProyectoVideoclub\Util;
+//include_once "Modelo/Soporte.php";
+//include_once __DIR__ . "/VideoclubException.php";
 class SoporteYaAlquiladoException extends \Dwes\ProyectoVideoclub\util\VideoclubException{
     public function __construct(string $message = "", int $code = 0, ?Throwable $previous = null, $soporte){
         parent::__construct($message, $code, $previous);

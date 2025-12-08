@@ -1,6 +1,6 @@
 <?php
 
-namespace Dwes\ProyectoVideoclub;
+namespace Dwes\ProyectoVideoclub\Modelo;
 class Dvd extends Soporte{
 
     private string $formatPantalla;

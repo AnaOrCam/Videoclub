@@ -1,11 +1,11 @@
 <?php
 
-namespace Dwes\ProyectoVideoclub;
+namespace Dwes\ProyectoVideoclub\Modelo;
 
-include_once("Soporte.php");
-include_once __DIR__."/../SoporteYaAlquiladoException.php";
-include_once __DIR__."/../CupoYaSuperadoException.php";
-include_once __DIR__."/../SoporteNoEncontradoException.php";
+//include_once("Soporte.php");
+//include_once __DIR__ . "/../util/SoporteYaAlquiladoException.php";
+//include_once __DIR__ . "/../util/CupoYaSuperadoException.php";
+//include_once __DIR__ . "/../util/SoporteNoEncontradoException.php";
 class Cliente{
 
     private int $numero;

@@ -1,7 +1,7 @@
 <?php
 
-namespace Dwes\ProyectoVideoclub\util;
-include_once __DIR__."/VideoclubException.php";
+namespace Dwes\ProyectoVideoclub\Util;
+//include_once __DIR__ . "/VideoclubException.php";
 class SoporteNoEncontradoException extends \Dwes\ProyectoVideoclub\util\VideoclubException{
 
     public function __toString():String{
