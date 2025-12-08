@@ -119,4 +119,4 @@ $_SESSION['videoclub']=$vc;
 $_SESSION['arrayClientes']=$arrayClientes;
 $_SESSION['arraySoportes']=$arraySoportes;
 $_SESSION['alquileresVigentes']=$alquileresVigentes;
-header('Location: Login.php');
+

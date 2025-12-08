@@ -9,6 +9,12 @@ use Dwes\ProyectoVideoclub\Modelo\Juego;
 use Dwes\ProyectoVideoclub\Util\SoporteYaAlquiladoException;
 use Dwes\ProyectoVideoclub\Util\VideoclubException;
 use Dwes\ProyectoVideoclub\Modelo\Soporte;
+use Dwes\ProyectoVideoclub\Util\LogFactory\LogFactory;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Level;
+use Monolog\Logger;
+
 //
 //include_once "Modelo/Soporte.php";
 //include_once "Modelo/CintaVideo.php";
@@ -17,7 +23,7 @@ use Dwes\ProyectoVideoclub\Modelo\Soporte;
 //include_once "Modelo/Cliente.php";
 
 class Videoclub{
-
+    private $log;
     public function __construct(private string $nombre){
         $this->nombre=$nombre;
         $this->productos=[];
@@ -26,6 +32,9 @@ class Videoclub{
         $this->numSocios=0;
         $this->numProductosAlquilados=0;
         $this->numTotalAlquileres=0;
+        //$this->log=new Logger("VideoclubLogger");
+        //$this->log->pushHandler(new RotatingFileHandler(__DIR__."/Logs/logs",7,Level::Debug));
+        $this->log=LogFactory::createLogger("VideoclubLogger",__DIR__."/Logs/logs");
     }
 
     public function getProductos(): array
@@ -45,7 +54,8 @@ class Videoclub{
     private function incluirProducto(Soporte $producto){
         $this->productos[]=$producto;
         $this->numProductos++;
-        echo "Incluido soporte ".$producto->getNumero()."<br>";
+        $this->log->info("Incluido soporte",['numeroSoporte'=>$producto->getNumero()]);
+        //echo "Incluido soporte ".$producto->getNumero()."<br>";
     }
 
     public function buscarSocioPorId(int $id):?Cliente{
@@ -92,7 +102,8 @@ class Videoclub{
         $clienteAux=new Cliente($nombre, $usuario,$pass, $maxAlquileresConcurrentes);
         $this->socios[]=$clienteAux;
         $this->numSocios++;
-        echo "Incluido socio ".$clienteAux->getNumero()."<br>";
+        $this->log->info("Incluido socio",['numSocio'=>$clienteAux->getNumero()]);
+        //echo "Incluido socio ".$clienteAux->getNumero()."<br>";
         return $clienteAux;
     }
 
@@ -116,8 +127,14 @@ class Videoclub{
             foreach ($this->productos as $producto) {
                 if ($producto->getNumero() == $numeroSoporte) $soporteAux = $producto;
             }
-            if ($socioAux == null) throw new util\ClienteNoEncontradoException();
-            if ($soporteAux == null) throw new util\SoporteNoEncontradoException();
+            if ($socioAux == null){
+                $this->log->warning("Cliente no encontrado",['numCliente'=>$numeroCliente]);
+                throw new util\ClienteNoEncontradoException();
+            }
+            if ($soporteAux == null){
+                $this->log->warning("Soporte no encontrado",['numSoporte'=>$numeroSoporte]);
+                throw new util\SoporteNoEncontradoException();
+            }
             $socioAux->alquilar($soporteAux);
             $this->numProductosAlquilados++;
             $this->numTotalAlquileres++;
@@ -139,12 +156,21 @@ class Videoclub{
                     if ($producto->getNumero() == $numeroSoporte){
                         $existe=true;
                         if (!$producto->alquilado) $arraySoportesAlquilar[]=$producto;
-                        else throw new SoporteYaAlquiladoException("",0,null,$producto);
+                        else{
+                            $this->log->warning("Soporte ya alquilado",['numSoporte'=>$numeroSoporte]);
+                            throw new SoporteYaAlquiladoException("",0,null,$producto);
+                        }
                     }
                 }
-                if (!$existe) throw new util\SoporteNoEncontradoException();
+                if (!$existe) {
+                    $this->log->warning("Soporte no encontrado", ['numSoporte' => $numeroSoporte]);
+                    throw new util\SoporteNoEncontradoException();
+                }
             }
-            if ($socioAux == null) throw new util\ClienteNoEncontradoException();
+            if ($socioAux == null) {
+                $this->log->warning("Cliente no encontrado", ['numCliente' => $numeroCliente]);
+                throw new util\ClienteNoEncontradoException();
+            }
             foreach ($arraySoportesAlquilar as $soporte){
                 $socioAux->alquilar($soporte);
                 $this->numProductosAlquilados++;
@@ -165,8 +191,14 @@ class Videoclub{
             foreach ($this->productos as $producto) {
                 if ($producto->getNumero() == $numeroSoporte) $soporteAux = $producto;
             }
-            if ($socioAux == null) throw new util\ClienteNoEncontradoException();
-            if ($soporteAux == null) throw new util\SoporteNoEncontradoException();
+            if ($socioAux == null){
+                $this->log->warning("Cliente no encontrado",['numCliente'=>$numeroCliente]);
+                throw new util\ClienteNoEncontradoException();
+            }
+            if ($soporteAux == null) {
+                $this->log->warning("Soporte no encontrado", ['numSoporte' => $numeroSoporte]);
+                throw new util\SoporteNoEncontradoException();
+            }
             $socioAux->devolver($numeroSoporte);
             $this->numProductosAlquilados--;
         }catch (VideoclubException $ve){
@@ -186,12 +218,21 @@ class Videoclub{
                 foreach ($this->productos as $producto) {
                     if ($producto->getNumero() == $numeroSoporte){
                         $existe=true;
-                        if (!$producto->alquilado) echo "<br>El soporte ".$producto->getTitulo()." no está alquilado por lo que no se puede devolver";
+                        if (!$producto->alquilado){
+                            $this->log->info("El soporte ya está alquilado",['titulo'=>$producto->getTitulo()]);
+                            //echo "<br>El soporte ".$producto->getTitulo()." no está alquilado por lo que no se puede devolver";
+                        }
                     }
                 }
-                if (!$existe) throw new util\SoporteNoEncontradoException();
+                if (!$existe){
+                    $this->log->warning("Soporte no encontrado",['numSoporte'=>$numeroSoporte]);
+                    throw new util\SoporteNoEncontradoException();
+                }
             }
-            if ($socioAux == null) throw new util\ClienteNoEncontradoException();
+            if ($socioAux == null){
+                $this->log->warning("Cliente no encontrado",['numCliente'=>$numeroCliente]);
+                throw new util\ClienteNoEncontradoException();
+            }
             foreach ($numeroSoportes as $numero){
                 $socioAux->devolver($numero);
                 $this->numProductosAlquilados--;

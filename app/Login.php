@@ -19,6 +19,8 @@ $cliente1=$vc->incluirSocio("Amancio Ortega","aortega","aortega");
 $cliente2=$vc->incluirSocio("Pablo Picasso", "ppicasso","ppicasso",2);
 $vc->alquilarSocioProductos(0,[0,1,6]);
 $vc->alquilarSocioProductos(1,[2,4]);
+$vc->devolverSocioProducto(0,0);
+$vc->alquilarSocioProducto(0,0);
 $arrayClientes=[$cliente1,$cliente2];
 $arraySoportes=[$soporte1,$soporte2,$soporte3,$soporte4,$soporte5,$soporte6,$soporte7];
 $alquileresVigentes=[

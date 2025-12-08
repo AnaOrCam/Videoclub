@@ -6,12 +6,19 @@ namespace Dwes\ProyectoVideoclub\Modelo;
 //include_once __DIR__ . "/../util/SoporteYaAlquiladoException.php";
 //include_once __DIR__ . "/../util/CupoYaSuperadoException.php";
 //include_once __DIR__ . "/../util/SoporteNoEncontradoException.php";
+use Dwes\ProyectoVideoclub\Util\LogFactory\LogFactory;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Level;
+use Monolog\Logger;
+
 class Cliente{
 
     private int $numero;
     private array $soportesAlquilados;
     private int $numSoportesAlquilados;
     private int $maxAlquilerConcurrente;
+    private $log;
 
     private static $numSocios=0;
     public  function __construct(public string $nombre, public string $usuario, public string $pass,int $maxAlquilerConcurrente=3){
@@ -21,6 +28,9 @@ class Cliente{
         $this->maxAlquilerConcurrente=$maxAlquilerConcurrente;
         $this->soportesAlquilados=[];
         $this->numSoportesAlquilados=0;
+        //$this->log=new Logger("VideoclubLogger");
+        //$this->log->pushHandler(new RotatingFileHandler(__DIR__.'/../Logs/logs',7,Level::Debug));
+        $this->log= LogFactory::createLogger("VideoclubLogger","/../Logs/logs");
     }
 
     public function getAlquileres(): array{
@@ -94,14 +104,21 @@ class Cliente{
 
     public function alquilar(Soporte $s):bool{
         if (in_array($s,$this->soportesAlquilados) || count($this->soportesAlquilados)==$this->maxAlquilerConcurrente){
-            if (in_array($s,$this->soportesAlquilados)) throw new util\SoporteYaAlquiladoException("",0,null,$s);
-            if (count($this->soportesAlquilados)==$this->maxAlquilerConcurrente) throw new util\CupoYaSuperadoException();
+            if (in_array($s,$this->soportesAlquilados)){
+                $this->log->warning("El soporte ya está alquilado.");
+                throw new util\SoporteYaAlquiladoException("",0,null,$s);
+            }
+            if (count($this->soportesAlquilados)==$this->maxAlquilerConcurrente){
+                $this->log->warning("El usuario ya tiene el cupo de alquileres subierto.");
+                throw new util\CupoYaSuperadoException();
+            }
             return false;
         }else{
             $this->numSoportesAlquilados++;
             $this->soportesAlquilados[]=$s;
             $s->alquilado=true;
-            echo "<br><strong>Alquilado soporte a: </strong> $this->nombre";
+            $this->log->info("Alquilado soporte a: $this->nombre");
+            //echo "<br><strong>Alquilado soporte a: </strong> $this->nombre";
             $s->muestraResumen();
             return true;
         }
@@ -115,7 +132,8 @@ class Cliente{
                 $this->soportesAlquilados[$i]->alquilado=false;
                 array_splice($this->soportesAlquilados,$i,1);
                 $this->numSoportesAlquilados--;
-                echo "<br>El soporte ha sido devuelto";
+                $this->log->info("El soporte ha sido devuelto");
+                //echo "<br>El soporte ha sido devuelto";
                 return true;
             }
         }
