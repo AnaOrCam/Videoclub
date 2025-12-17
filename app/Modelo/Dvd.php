@@ -9,6 +9,37 @@ class Dvd extends Soporte{
         $this->formatPantalla=$formatPantalla;
     }
 
+    public function getTitulo()
+    {
+        parent::getTitulo();
+    }
+
+    public function getPrecio()
+    {
+        parent::getPrecio();
+    }
+    public function getFormatPantalla(): string
+    {
+        return $this->formatPantalla;
+    }
+
+    public function setFormatPantalla(string $formatPantalla): void
+    {
+        $this->formatPantalla = $formatPantalla;
+    }
+
+    public function getIdiomas(): string
+    {
+        return $this->idiomas;
+    }
+
+    public function setIdiomas(string $idiomas): void
+    {
+        $this->idiomas = $idiomas;
+    }
+
+
+
     public function muestraResumen(){
         echo "<br>Película en DVD: ";
         echo parent::muestraResumen()."Idiomas: $this->idiomas <br>Formato Pantalla: $this->formatPantalla";

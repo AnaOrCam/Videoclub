@@ -13,21 +13,19 @@ use Monolog\Level;
 use Monolog\Logger;
 
 class Cliente{
-
-    private int $numero;
+    private string|null $numero;
     private array $soportesAlquilados;
     private int $numSoportesAlquilados;
     private int $maxAlquilerConcurrente;
     private $log;
 
-    private static $numSocios=0;
-    public  function __construct(public string $nombre, public string $usuario, public string $pass,int $maxAlquilerConcurrente=3){
-        $this->numero=self::$numSocios++;
+    public  function __construct($numero,public string $nombre, public string $usuario, public string $pass,int $maxAlquilerConcurrente=3, int $numSoportesAlquilados=0){
+        $this->numero=$numero;
         $this->usuario=$usuario;
         $this->pass=$pass;
         $this->maxAlquilerConcurrente=$maxAlquilerConcurrente;
         $this->soportesAlquilados=[];
-        $this->numSoportesAlquilados=0;
+        $this->numSoportesAlquilados=$numSoportesAlquilados;
         //$this->log=new Logger("VideoclubLogger");
         //$this->log->pushHandler(new RotatingFileHandler(__DIR__.'/../Logs/logs',7,Level::Debug));
         $this->log= LogFactory::createLogger("VideoclubLogger","/../Logs/logs");

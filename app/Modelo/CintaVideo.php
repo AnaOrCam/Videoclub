@@ -8,7 +8,27 @@ class CintaVideo extends Soporte{
         $this->duracion=$duracion;
     }
 
-    public function getTitulo(){}
+    public function getTitulo()
+    {
+        return parent::getTitulo();
+    }
+
+    public function getPrecio()
+    {
+        return parent::getPrecio();
+    }
+
+    public function getDuracion(): int
+    {
+        return $this->duracion;
+    }
+
+    public function setDuracion(int $duracion): void
+    {
+        $this->duracion = $duracion;
+    }
+
+
     public function muestraResumen()
     {
         echo "<br>Película en VHS:";

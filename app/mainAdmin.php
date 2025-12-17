@@ -8,18 +8,27 @@
 //include_once "Modelo/Juego.php";
 include_once __DIR__."/../vendor/autoload.php";
 
+use Dwes\ProyectoVideoclub\clienteDataAccess\DAOCliente;
+use \Dwes\ProyectoVideoclub\Modelo\Cliente;
+
 session_start();
 
+$DAOCliente=new DAOCliente();
 if ($_SESSION['tipo']=='admin') {
     echo 'Bienvenido ' . $_SESSION['usuario'] . '<br><br>';
 
     $videoclub = $_SESSION['videoclub'] ?? [];
-    $listaUsuarios = $_SESSION['listaUsuarios'];
+//    $listaUsuarios = $_SESSION['listaUsuarios'];
+    $listaUsuariosDao=$DAOCliente->getAll();
+    $listaUsuarios=array_map(fn($user)=>new Cliente($user['id'],$user['name'],$user['user'],$user['pass'],$user['maxConcurrente'],$user['numSoportesAlquilados']),$listaUsuariosDao);
 
     echo "<br><em>Lista de Clientes:</em><br>";
     echo "<ul>";
-    foreach ($videoclub->getSocios() as $cliente) {
-        echo '<li>' . $cliente->__toString() . ' <a id="' . $cliente->getUsuario() . '" href="formUpdateCliente.php?usuario=' . $cliente->getUsuario() . '">Editar cliente</a></li><br>';
+    foreach ($listaUsuarios as $cliente) {
+        echo '<li>'.$cliente->__toString().
+            '<a id="'.$cliente->getUsuario().'" href="formUpdateCliente.php?usuario='.$cliente->getUsuario().'">Editar cliente</a>
+            <a id="'.$cliente->getUsuario().'" href="removeCliente.php?id='.$cliente->getNumero().'">Eliminar cliente</a>
+            </li><br>';
     }
 //foreach ($listaUsuarios as $cliente){
 //    echo '<li>'.$cliente.' <a id="'.$cliente.'" href="removeCliente.php?usuario='.$cliente.'">Borrar cliente</a></li><br>';

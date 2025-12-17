@@ -1,5 +1,6 @@
 <?php
-
+use Dwes\ProyectoVideoclub\clienteDataAccess\DAOCliente;
+use Dwes\ProyectoVideoclub\Modelo\Cliente;
 //include_once "Videoclub.php";
 include_once __DIR__."/../vendor/autoload.php";
 
@@ -11,9 +12,11 @@ $pass=$_POST['pass'] ?? $_GET['pass'] ?? "";
 $alqConcurrentes=$_POST['alqConc'] ?? $_GET['alqConc'] ?? 0;
 $validado=$_GET['validado'] ?? "";
 
-$listaUsuariosYPass=$_SESSION['listaUsuarios'];
+//$listaUsuariosYPass=$_SESSION['listaUsuarios'];
 $vc=$_SESSION['videoclub'] ?? [];
-$listaSocios=$vc->getSocios();
+$DAOCliente=new DAOCliente();
+$listaSociosDao=$DAOCliente->getAll();
+$listaSocios=array_map(fn($user)=>new Cliente($user['id'],$user['name'],$user['user'],$user['pass'],$user['maxConcurrente'],$user['numSoportesAlquilados']),$listaSociosDao);
 
 foreach ($listaSocios as $socio){
     if ($socio->getUsuario()==$nombreUsuario){
@@ -32,9 +35,11 @@ $resend->emails->send([
 
 echo "Se ha enviado un mensaje de validacion al correo.";
 if ($validado==1){
-    $vc->incluirSocio($nombre, $nombreUsuario,$pass,$alqConcurrentes);
+    $clienteAux=new Cliente(null,$nombre,$nombreUsuario,$pass,$alqConcurrentes);
+    $DAOCliente->insert($clienteAux);
+//    $vc->incluirSocio($nombre, $nombreUsuario,$pass,$alqConcurrentes);
     $listaUsuariosYPass[$nombreUsuario]=$pass;
-    $_SESSION['listaUsuarios']=$listaUsuariosYPass;
+//    $_SESSION['listaUsuarios']=$listaUsuariosYPass;
     unset($_SESSION['errorRegistro']);
     header('Location: mainAdmin.php');
 }

@@ -11,13 +11,51 @@ class Juego extends Soporte{
         $this->maxNumJugadores=$maxNumJugadores;
     }
 
+    public function getMinNumJugadores(): int
+    {
+        return $this->minNumJugadores;
+    }
+
+    public function setMinNumJugadores(int $minNumJugadores): void
+    {
+        $this->minNumJugadores = $minNumJugadores;
+    }
+
+    public function getMaxNumJugadores(): int
+    {
+        return $this->maxNumJugadores;
+    }
+
+    public function setMaxNumJugadores(int $maxNumJugadores): void
+    {
+        $this->maxNumJugadores = $maxNumJugadores;
+    }
+
+    public function getConsola(): string
+    {
+        return $this->consola;
+    }
+
+    public function setConsola(string $consola): void
+    {
+        $this->consola = $consola;
+    }
+
+    public function getTitulo()
+    {
+        return parent::getTitulo();
+    }
+
+    public function getPrecio()
+    {
+        return parent::getPrecio();
+    }
+
     public function muestraJugadoresPosibles(){
         if($this->maxNumJugadores==1) return "Para 1 jugador";
         elseif ($this->maxNumJugadores !=  $this->minNumJugadores) return "De $this->minNumJugadores a $this->maxNumJugadores jugadores";
         else return "Para $this->maxNumJugadores jugadores";
     }
-
-    public function getTitulo(){}
 
     public function muestraResumen(){
         echo "<br>Juego para PS4:";

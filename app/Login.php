@@ -1,6 +1,8 @@
 <?php
 
 include_once __DIR__."/../vendor/autoload.php";
+use Dwes\ProyectoVideoclub\clienteDataAccess\DAOCliente;
+use Dwes\ProyectoVideoclub\Modelo\Cliente;
 
 session_start();
 use Dwes\ProyectoVideoclub\Videoclub as vc;
@@ -31,31 +33,47 @@ $_SESSION['videoclub']=$vc;
 $usuarios=[
     'admin'=>'admin'
 ];
-foreach ($arrayClientes as $cliente){
-    $usuario=$cliente->usuario;
-    $pass=$cliente->pass;
-    $usuarios[$usuario]=$pass;
-    echo "<br>";
-}echo"<br>";
+//foreach ($arrayClientes as $cliente){
+//    $usuario=$cliente->usuario;
+//    $pass=$cliente->pass;
+//    $usuarios[$usuario]=$pass;
+//    echo "<br>";
+//}echo"<br>";
 
-$_SESSION['listaUsuarios']=$usuarios;
+//$_SESSION['listaUsuarios']=$usuarios;
 
 $usuarioLogueado=$_POST['usuario'] ?? "";
 $pass= $_POST['pass'] ?? "";
 
+$DAOCliente=new DAOCliente();
+$usuarioDao=$DAOCliente->getClient($usuarioLogueado);
 
-if (isset($usuarios[$usuarioLogueado]) && $usuarios[$usuarioLogueado]==$pass){
+if ($usuarioLogueado=='admin'){
+    $_SESSION['usuario']=$usuarioLogueado;
+    $_SESSION['tipo']='admin';
+    header('Location: mainAdmin.php');
+}elseif($usuarioDao && password_verify($_POST['pass'], $usuarioDao['pass'])){
     $_SESSION['usuario']=$usuarioLogueado;
     unset($_SESSION['accesoIncorrecto']);
-    if ($usuarioLogueado=='admin'){
-        $_SESSION['tipo']='admin';
-        header('Location: mainAdmin.php');
-    }
-    else{
-        $_SESSION['tipo']='cliente';
-        header('Location: mainCliente.php');
-    }
+    $_SESSION['tipo']='cliente';
+    header('Location: mainCliente.php');
 }else{
     $_SESSION['accesoIncorrecto']=true;
     header('Location: Index.php');
 }
+
+//if (isset($usuarios[$usuarioLogueado]) && $usuarios[$usuarioLogueado]==$pass){
+//    $_SESSION['usuario']=$usuarioLogueado;
+//    unset($_SESSION['accesoIncorrecto']);
+//    if ($usuarioLogueado=='admin'){
+//        $_SESSION['tipo']='admin';
+//        header('Location: mainAdmin.php');
+//    }
+//    else{
+//        $_SESSION['tipo']='cliente';
+//        header('Location: mainCliente.php');
+//    }
+//}else{
+//    $_SESSION['accesoIncorrecto']=true;
+//    header('Location: Index.php');
+//}

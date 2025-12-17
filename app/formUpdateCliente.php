@@ -1,16 +1,20 @@
 <?php
-
+use Dwes\ProyectoVideoclub\clienteDataAccess\DAOCliente;
+use Dwes\ProyectoVideoclub\Modelo\Cliente;
 //include_once 'videoclub.php';
 //include_once "Modelo/Cliente.php";
 include_once __DIR__."/../vendor/autoload.php";
 session_start();
 
 $usuario=$_GET['usuario'];
-$vc=$_SESSION['videoclub'];
-$listaClientes=$vc->getSocios();
+//$vc=$_SESSION['videoclub'];
+//$listaClientes=$vc->getSocios();
+$DAOCliente=new DAOCliente();
+$listaUsuariosDao=$DAOCliente->getAll();
+$listaUsuarios=array_map(fn($user)=>new Cliente($user['id'],$user['name'],$user['user'],$user['pass'],$user['maxConcurrente'],$user['numSoportesAlquilados']),$listaUsuariosDao);
 $clienteAEditar="";
 
-foreach ($listaClientes as $cliente){
+foreach ($listaUsuarios as $cliente){
     if ($cliente->getUsuario()==$usuario) $clienteAEditar=$cliente;
 }
 //$clienteSerializado=serialize($clienteAEditar);
