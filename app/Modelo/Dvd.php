@@ -4,19 +4,24 @@ namespace Dwes\ProyectoVideoclub\Modelo;
 class Dvd extends Soporte{
 
     private string $formatPantalla;
-    public function __construct(string $titulo, float $precio, public string $idiomas, string $formatPantalla){
+    public function __construct(string $id,string $titulo, float $precio, public string $idiomas, string $formatPantalla){
         parent::__construct($titulo, $precio);
         $this->formatPantalla=$formatPantalla;
+        $this->id=$id;
     }
 
     public function getTitulo()
     {
-        parent::getTitulo();
+       return parent::getTitulo();
     }
 
     public function getPrecio()
     {
-        parent::getPrecio();
+        return parent::getPrecio();
+    }
+
+    public function getId(){
+        return $this->id;
     }
     public function getFormatPantalla(): string
     {

@@ -27,6 +27,14 @@ class Database
         return $sentence->fetchAll();
     }
 
+    public function executeOneQuery($sql, $params = [])
+    {
+        $sentence = $this->connection->prepare($sql);
+        $sentence->execute($params);
+
+        return $sentence->fetch();
+    }
+
     public function executeUpdate($sql, $params = [])
     {
         $sentence = $this->connection->prepare($sql);

@@ -1,6 +1,6 @@
 <?php
 namespace Dwes\ProyectoVideoclub\soporteDataAccess;
-require __DIR__."/../database/Database.php";
+require_once __DIR__."/../database/Database.php";
 include_once __DIR__ ."/../database/conf.env.php";
 include_once __DIR__."/../Modelo/Juego.php";
 class DAOJuego{
@@ -13,9 +13,10 @@ class DAOJuego{
     }
     public function insert($juego,$idCliente=null) : int{
 
-        $sql = "INSERT INTO dvd VALUES (null,:name, :price, :platform , :minGamers, :maxGamers, :idCliente);";
+        $sql = "INSERT INTO juego VALUES (:id,:name, :price, :platform , :minGamers, :maxGamers, :idCliente);";
 
         $params = [
+            ":id"=> $juego->getId(),
             ":name"=> $juego->getTitulo(),
             ":price" => $juego->getPrecio(),
             ":platform" => $juego->getConsola(),
@@ -45,6 +46,17 @@ class DAOJuego{
         ];
 
         return $this->db->executeQuery($sql, $params);
+    }
+
+    public function getJuego($id){
+
+        $sql = "SELECT * FROM juego WHERE id=:id;";
+
+        $params = [
+            ":id"=>$id
+        ];
+
+        return $this->db->executeOneQuery($sql, $params);
     }
 
     public function update($juego,$idCliente=null) : int{

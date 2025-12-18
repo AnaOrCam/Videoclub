@@ -1,6 +1,6 @@
 <?php
 namespace Dwes\ProyectoVideoclub\clienteDataAccess;
-require __DIR__."/../database/Database.php";
+require_once __DIR__."/../database/Database.php";
 include_once __DIR__."/../Modelo/Cliente.php";
 
 
@@ -50,7 +50,7 @@ class DAOCliente{
         return $this->db->executeQuery($sql, $params);
     }
 
-    public function getClient($user) : array{
+    public function getClient($user){
 
         $sql = "SELECT * FROM cliente WHERE user=:user;";
 
@@ -58,7 +58,7 @@ class DAOCliente{
             ":user"=>$user
         ];
 
-        return $this->db->executeQuery($sql, $params);
+        return $this->db->executeOneQuery($sql, $params);
     }
 
     public function update($cliente) : int{
@@ -69,7 +69,7 @@ class DAOCliente{
             ":id" => $cliente->getNumero(),
             ":name"=> $cliente->getNombre(),
             ":user" => $cliente->getUsuario(),
-            ":pass" => hash("sha256",$cliente->getPass()),
+            ":pass" => password_hash($cliente->getPass(),PASSWORD_DEFAULT),
             ":maxConcurrente" => $cliente->getMaxAlquilerConcurrente(),
             ":numSoportesAlquilados"=> $cliente->getNumSoportesAlquilados()
         ];

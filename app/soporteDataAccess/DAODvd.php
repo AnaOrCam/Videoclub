@@ -1,6 +1,6 @@
 <?php
 namespace Dwes\ProyectoVideoclub\soporteDataAccess;
-require __DIR__."/../database/Database.php";
+require_once __DIR__."/../database/Database.php";
 include_once __DIR__ ."/../database/conf.env.php";
 include_once __DIR__."/../Modelo/Dvd.php";
 class DAODvd{
@@ -13,9 +13,10 @@ class DAODvd{
     }
     public function insert($dvd,$idCliente=null) : int{
 
-        $sql = "INSERT INTO dvd VALUES (null,:name, :price, :format , :languajes, :idCliente);";
+        $sql = "INSERT INTO dvd (id, titulo, precio, formato, idiomas, idCliente) VALUES (:id,:name, :price, :format , :languajes, :idCliente);";
 
         $params = [
+            ":id"=> $dvd->getId(),
             ":name"=> $dvd->getTitulo(),
             ":price" => $dvd->getPrecio(),
             ":format" => $dvd->getFormatPantalla(),
@@ -46,6 +47,16 @@ class DAODvd{
         return $this->db->executeQuery($sql, $params);
     }
 
+    public function getDvd($id){
+
+        $sql = "SELECT * FROM dvd WHERE id=:id;";
+
+        $params = [
+            ":id"=> $id
+        ];
+
+        return $this->db->executeOneQuery($sql, $params);
+    }
     public function update($dvd,$idCliente=null) : int{
 
         $sql = "UPDATE dvd SET titulo=:name, precio=:price, formato=:format, idiomas=:languajes, idCliente=:idCliente WHERE id=:id;";

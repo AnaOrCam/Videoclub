@@ -5,12 +5,15 @@ class Juego extends Soporte{
 
     private int $minNumJugadores;
     private int $maxNumJugadores;
-    public function __construct($titulo, $precio, public string $consola, int $minNumJugadores, int $maxNumJugadores){
+    public function __construct(string $id,$titulo, $precio, public string $consola, int $minNumJugadores, int $maxNumJugadores){
         parent::__construct($titulo,$precio);
         $this->minNumJugadores=$minNumJugadores;
         $this->maxNumJugadores=$maxNumJugadores;
+        $this->id=$id;
     }
-
+    public function getId(){
+        return $this->id;
+    }
     public function getMinNumJugadores(): int
     {
         return $this->minNumJugadores;
